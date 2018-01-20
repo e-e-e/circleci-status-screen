@@ -5,9 +5,11 @@ import time
 from itertools import groupby
 from os.path import dirname, join
 
+
 from circleclient import circleclient
 
 from dotenv import load_dotenv
+
 
 # load environment variables
 dotenv_path = join(dirname(__file__), '.env')
@@ -17,6 +19,23 @@ load_dotenv(dotenv_path)
 token = os.environ['CIRCLE_API_TOKEN']
 client = circleclient.CircleClient(token)
 pp = pprint.PrettyPrinter(indent=4)
+
+# setup matrix
+matrix = None
+
+if os.environ['PI']:
+    # if running on the pi import all image libraries and fonts
+    import Image
+    import ImageDraw
+    import ImageFont
+
+    draw = ImageDraw.Draw(image)
+
+    # use a bitmap font
+    font = ImageFont.load("fonts/helvR12.bdf")
+
+    from rgbmatrix import Adafruit_RGBmatrix
+    matrix = Adafruit_RGBmatrix(32, 1)
 
 
 def is_milli(project):
@@ -117,11 +136,17 @@ def loop():
         print('Keep calm and carry on!')
         for x in last_test['workflow']:
             print(x['status'], x['workflows']['job_name'])
+        if matrix:
+            matrix.Fill(0x00FF00)
     elif status == 'failed':
         print('Things are not ok!')
         print(last_test['user'] + ' broke the build with commit: ' + last_test['subject'])
+        if matrix:
+            matrix.Fill(0xFF0000)
     else:
         print('running ' + last_test['subject'] + ':' + str(last_test['progress']) + '%')
+        if matrix:
+            matrix.Fill(0xFF00FF)
     time.sleep(30)
     loop()
 
