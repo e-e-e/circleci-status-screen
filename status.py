@@ -242,7 +242,7 @@ def render():
         return
     draw.rectangle([(0, 0), (64, 32)], fill='black')
     draw.rectangle([(0, 0), (64, 16)], fill=status_fill)
-    if status_progress:
+    if status_progress is not None:
         progress = int(round((100 - status_progress) / 100.0 * 64))
         draw.rectangle([(64 - progress, 0), (64, 16)], fill='#0070a0')
     if status_text:
