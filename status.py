@@ -227,9 +227,9 @@ def render():
     """Render status to screen."""
     if matrix is None:
         return
-    draw.rectangle((0, 0), (64, 32), fill='black')
-    draw.rectangle((0, 0), (64, 4), fill=status_fill)
-    draw.rectangle((0, 32 - 4), (64, 32 - 4), fill=status_fill)
+    draw.rectangle([(0, 0), (64, 32)], fill='black')
+    draw.rectangle([(0, 0), (64, 4)], fill=status_fill)
+    draw.rectangle([(0, 32 - 4), (64, 32 - 4)], fill=status_fill)
     if status_text:
         text = status_text[status_text_index]
         draw.text((64 - text_x, text_y), text, font=font, fill=status_fill)
