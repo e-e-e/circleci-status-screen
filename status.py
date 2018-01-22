@@ -173,11 +173,11 @@ def positive_value(v):
     return v
 
 
-def text_width(text):
+def text_width(text, font):
     """Return size of sentence in pixels."""
     if matrix is None:
         return 10  # a dummy value for when not running on the PI
-    return draw.textsize(text)[0]
+    return draw.textsize(text, font=font)[0]
 
 
 def set_global_status_vars(test):
@@ -206,8 +206,8 @@ def set_global_status_vars(test):
         status_text = [
             'Progress ' + str(test['progress']) + '%'
         ]
-    text_length = text_width(status_text[status_text_index]) + 20
-    status_x = (64 - text_width(status)) / 2
+    text_length = text_width(status_text[status_text_index], font)
+    status_x = (64 - text_width(status, font)) / 2
     if status_x < 0:
         status_x = 0
 
@@ -222,8 +222,10 @@ def animate_sentence():
     if (text_x > text_length + 64):
         text_x = 0
         status_text_index = (status_text_index + 1) % len(status_text)
-        text_length = text_width(status_text[status_text_index]) + 20
+        text_length = text_width(status_text[status_text_index], font)
         print (status_text[status_text_index])
+        return True
+    return False
 
 
 def render():
@@ -251,19 +253,27 @@ def render():
     matrix.SetImage(image.im.id, 0, 0)
 
 
+def fetch_circle_info():
+    """Get data from CircleCI and process it for rendering."""
+    global last_test
+    project = get_project()
+    last_test = process_recent_builds(project)
+    set_global_status_vars(last_test)
+    print_status()
+
+
 def loop():
     """Main application loop."""
-    global last_test
     global then
     now = time.time()
-    if now - then > POLL_RATE or last_test is None:
-        project = get_project()
-        last_test = process_recent_builds(project)
-        set_global_status_vars(last_test)
-        print_status()
+    if last_test is None:
+        fetch_circle_info()
         then = now
 
-    animate_sentence()
+    gap = animate_sentence()
+    if gap and now - then > POLL_RATE:
+        fetch_circle_info()
+
     render()
     # execution_time = time.time() - then
     # time.sleep(positive_value(0.05 - execution_time))
