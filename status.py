@@ -30,12 +30,13 @@ pp = pprint.PrettyPrinter(indent=4)
 
 # setup drawing variables
 POLL_RATE = 30
-FONTSIZE = 12
+FONTSIZE = 10
 
 matrix = None
 image = None
 draw = None
 font = None
+fontBold = None
 
 # variables for rendering
 last_test = None
@@ -64,6 +65,7 @@ if is_PI:
     image = Image.new('RGB', (64, 32))
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype("DejaVuSans.ttf", FONTSIZE)
+    fontBold = ImageFont.truetype("DejaVuSans-Bold.ttf", FONTSIZE)
     matrix = Adafruit_RGBmatrix(32, 2)
 
 
@@ -206,7 +208,7 @@ def set_global_status_vars(test):
         status_text = [
             'Progress ' + str(test['progress']) + '%'
         ]
-    text_length = text_width(status_text[status_text_index], font)
+    text_length = text_width(status_text[status_text_index], font=fontBold)
     status = status.upper()
     status_x = (64 - text_width(status, font)) / 2
     if status_x < 0:
@@ -247,7 +249,7 @@ def render():
         draw.text(
             (status_x, text_y),
             status,
-            font=font,
+            font=fontBold,
             fill='black'
         )
     matrix.SetImage(image.im.id, 0, 0)
