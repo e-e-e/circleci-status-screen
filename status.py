@@ -244,7 +244,7 @@ def render():
     draw.rectangle([(0, 0), (64, 16)], fill=status_fill)
     if status_progress:
         progress = int(round(status_progress / float(100) * 64))
-        draw.rectangle([(0, 0), (progress, 16)], fill='rgb(102, 211, 228)')
+        draw.rectangle([(64 - progress, 0), (64, 16)], fill='#0070a0')
     if status_text:
         text = status_text[status_text_index]
         draw.text(
