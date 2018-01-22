@@ -192,6 +192,7 @@ def set_global_status_vars(test):
     global status_text_index
     global text_x
     global text_length
+    global status_progress
     status_text_index = 0
     text_x = 0
     status = test['status']
@@ -207,7 +208,7 @@ def set_global_status_vars(test):
         ]
         status_progress = None
     else:
-        status_fill = 'rgb(102, 211, 228)'
+        status_fill = '#00b2ff'
         status_text = [
             'Progress ' + str(test['progress']) + '%'
         ]
@@ -243,7 +244,7 @@ def render():
     draw.rectangle([(0, 0), (64, 16)], fill=status_fill)
     if status_progress:
         progress = int(round(status_progress / float(100) * 64))
-        draw.rectangle([(0, 0), (progress, 16)], fill='#00b2ff')
+        draw.rectangle([(0, 0), (progress, 16)], fill='rgb(102, 211, 228)')
     if status_text:
         text = status_text[status_text_index]
         draw.text(
