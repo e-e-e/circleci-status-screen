@@ -127,7 +127,7 @@ def workflow_status(workflow):
 
     if progress == len(workflow) and status != 'failed':
         status = 'success'
-    return status, round((progress / len(workflow)) * 100)
+    return status, round((progress / float(len(workflow))) * 100)
 
 
 def process_recent_builds(project):
