@@ -52,7 +52,7 @@ try:
 except:
     is_PI = False
 
-if is_PI is True:
+if is_PI:
     # if running on the pi import all image libraries and fonts
     import Image
     import ImageDraw
@@ -172,11 +172,11 @@ def positive_value(v):
     return v
 
 
-def text_size(text):
+def text_width(text):
     """Return size of sentence in pixels."""
     if matrix is None:
         return 10  # a dummy value for when not running on the PI
-    return draw.textsize(text)
+    return draw.textsize(text)[0]
 
 
 def set_global_status_vars(test):
@@ -206,7 +206,7 @@ def set_global_status_vars(test):
             test['subject'],
             str(test['progress']) + '%'
         ]
-    text_length = text_size(status_text[status_text_index])
+    text_length = text_width(status_text[status_text_index])
 
 
 def animate_sentence():
@@ -219,7 +219,7 @@ def animate_sentence():
     if (text_x > text_length + 64):
         text_x = 0
         status_text_index = (status_text_index + 1) % len(status_text)
-        text_length = text_size(status_text[status_text_index])
+        text_length = text_width(status_text[status_text_index])
         print (status_text[status_text_index])
 
 
