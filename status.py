@@ -30,7 +30,7 @@ pp = pprint.PrettyPrinter(indent=4)
 
 # setup drawing variables
 POLL_RATE = 30
-FONTSIZE = 15
+FONTSIZE = 12
 
 matrix = None
 image = None
@@ -41,10 +41,12 @@ font = None
 last_test = None
 status_text = []                    # a list for strings to display
 text_length = 0
+status = None
+status_x = 0
 status_text_index = 0
 status_fill = None                  # colour for notification of status
 text_x = None                       # the x position of strings
-text_y = (32 - FONTSIZE) / 2        # y position for drawing text
+text_y = (32 - FONTSIZE * 2) / 2        # y position for drawing text
 then = time.time()                  # timer for polling circle ci
 
 try:
@@ -176,11 +178,13 @@ def text_width(text):
     """Return size of sentence in pixels."""
     if matrix is None:
         return 10  # a dummy value for when not running on the PI
-    return draw.textsize(text)[0]
+    return draw.textsize(text)[0] + 30
 
 
 def set_global_status_vars(test):
     """Save workflow info into global vars."""
+    global status
+    global status_x
     global status_fill
     global status_text
     global status_text_index
@@ -200,10 +204,12 @@ def set_global_status_vars(test):
     else:
         status_fill = 'rgb(102, 211, 228)'
         status_text = [
-            'Running!' + test['subject'],
-            str(test['progress']) + '%'
+            'Running!' + str(test['progress']) + '%'
         ]
     text_length = text_width(status_text[status_text_index])
+    status_x = (64 - text_width(status)) / 2
+    if status_x < 0:
+        status_x = 0
 
 
 def animate_sentence():
@@ -226,10 +232,17 @@ def render():
         return
     draw.rectangle([(0, 0), (64, 32)], fill='black')
     draw.rectangle([(0, 0), (64, 4)], fill=status_fill)
-    draw.rectangle([(0, 32 - 4), (64, 32)], fill=status_fill)
+    draw.rectangle([(0, 32 - 5), (64, 32)], fill=status_fill)
     if status_text:
         text = status_text[status_text_index]
         draw.text((64 - text_x, text_y), text, font=font, fill=status_fill)
+    if status:
+        draw.text(
+            (status_x, text_y + FONTSIZE),
+            status,
+            font=font,
+            fill=status_fill
+        )
     matrix.SetImage(image.im.id, 0, 0)
 
 
