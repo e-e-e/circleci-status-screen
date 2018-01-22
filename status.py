@@ -62,7 +62,7 @@ if is_PI:
     image = Image.new('RGB', (64, 32))
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype("DejaVuSans.ttf", FONTSIZE)
-    matrix = Adafruit_RGBmatrix(32, 1)
+    matrix = Adafruit_RGBmatrix(32, 2)
 
 
 def is_project(project):
