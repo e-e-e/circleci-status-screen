@@ -44,6 +44,7 @@ status_text = []                    # a list for strings to display
 text_length = 0
 status = None
 status_x = 0
+status_progress = 0
 status_text_index = 0
 status_fill = None                  # colour for notification of status
 text_x = None                       # the x position of strings
@@ -197,17 +198,20 @@ def set_global_status_vars(test):
     if status == 'success':
         status_fill = '#00FF00'
         status_text = ['Keep calm and carry on!']
+        status_progress = None
     elif status == 'failed':
         status_fill = '#FF0000'
         status_text = [
             test['user'] + ' broke things!',
             test['subject'],
         ]
+        status_progress = None
     else:
         status_fill = 'rgb(102, 211, 228)'
         status_text = [
             'Progress ' + str(test['progress']) + '%'
         ]
+        status_progress = test['progress']
     text_length = text_width(status_text[status_text_index], font=fontBold)
     status = status.upper()
     status_x = (64 - text_width(status, font)) / 2
@@ -237,6 +241,9 @@ def render():
         return
     draw.rectangle([(0, 0), (64, 32)], fill='black')
     draw.rectangle([(0, 0), (64, 16)], fill=status_fill)
+    if status_progress:
+        progress = int(round(status_progress / float(100) * 64))
+        draw.rectangle([(0, 0), (progress, 16)], fill='#00b2ff')
     if status_text:
         text = status_text[status_text_index]
         draw.text(
