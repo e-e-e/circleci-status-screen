@@ -207,6 +207,7 @@ def set_global_status_vars(test):
             'Progress ' + str(test['progress']) + '%'
         ]
     text_length = text_width(status_text[status_text_index], font)
+    status = status.upper()
     status_x = (64 - text_width(status, font)) / 2
     if status_x < 0:
         status_x = 0
@@ -245,9 +246,9 @@ def render():
     if status:
         draw.text(
             (status_x, text_y),
-            status.upper(),
+            status,
             font=font,
-            fill='white'
+            fill='black'
         )
     matrix.SetImage(image.im.id, 0, 0)
 
