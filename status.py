@@ -46,7 +46,7 @@ status_x = 0
 status_text_index = 0
 status_fill = None                  # colour for notification of status
 text_x = None                       # the x position of strings
-text_y = (32 - FONTSIZE * 2) / 2        # y position for drawing text
+text_y = (16 - FONTSIZE) / 2        # y position for drawing text
 then = time.time()                  # timer for polling circle ci
 
 try:
@@ -127,7 +127,7 @@ def workflow_status(workflow):
 
     if progress == len(workflow) and status != 'failed':
         status = 'success'
-    return status, round((progress / float(len(workflow))) * 100)
+    return status, int(round((progress / float(len(workflow))) * 100))
 
 
 def process_recent_builds(project):
@@ -233,12 +233,11 @@ def render():
     if matrix is None:
         return
     draw.rectangle([(0, 0), (64, 32)], fill='black')
-    draw.rectangle([(0, 0), (64, 2)], fill=status_fill)
-    draw.rectangle([(0, 32 - 3), (64, 32)], fill=status_fill)
+    draw.rectangle([(0, 0), (64, 16)], fill=status_fill)
     if status_text:
         text = status_text[status_text_index]
         draw.text(
-            (64 - text_x, text_y + FONTSIZE),
+            (64 - text_x, text_y + 16),
             text,
             font=font,
             fill=status_fill
@@ -246,9 +245,9 @@ def render():
     if status:
         draw.text(
             (status_x, text_y),
-            status,
+            status.upper(),
             font=font,
-            fill=status_fill
+            fill='white'
         )
     matrix.SetImage(image.im.id, 0, 0)
 
