@@ -243,9 +243,9 @@ def loop():
         last_test = process_recent_builds(project)
         set_global_status_vars(last_test)
         print_status()
+        then = now
     animate_sentence()
     render()
-    then = now
     # execution_time = time.time() - then
     # time.sleep(positive_value(0.05 - execution_time))
     time.sleep(0.05)
