@@ -178,7 +178,7 @@ def text_width(text):
     """Return size of sentence in pixels."""
     if matrix is None:
         return 10  # a dummy value for when not running on the PI
-    return draw.textsize(text)[0] + 30
+    return draw.textsize(text)[0]
 
 
 def set_global_status_vars(test):
@@ -206,7 +206,7 @@ def set_global_status_vars(test):
         status_text = [
             'Running!' + str(test['progress']) + '%'
         ]
-    text_length = text_width(status_text[status_text_index])
+    text_length = text_width(status_text[status_text_index]) + 20
     status_x = (64 - text_width(status)) / 2
     if status_x < 0:
         status_x = 0
