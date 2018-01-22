@@ -200,11 +200,12 @@ def set_global_status_vars(test):
         status_fill = '#FF0000'
         status_text = [
             test['user'] + ' broke things!',
+            test['subject'],
         ]
     else:
         status_fill = 'rgb(102, 211, 228)'
         status_text = [
-            'Running!' + str(test['progress']) + '%'
+            'Progress ' + str(test['progress']) + '%'
         ]
     text_length = text_width(status_text[status_text_index]) + 20
     status_x = (64 - text_width(status)) / 2
@@ -222,7 +223,7 @@ def animate_sentence():
     if (text_x > text_length + 64):
         text_x = 0
         status_text_index = (status_text_index + 1) % len(status_text)
-        text_length = text_width(status_text[status_text_index])
+        text_length = text_width(status_text[status_text_index]) + 20
         print (status_text[status_text_index])
 
 
@@ -235,10 +236,15 @@ def render():
     draw.rectangle([(0, 32 - 3), (64, 32)], fill=status_fill)
     if status_text:
         text = status_text[status_text_index]
-        draw.text((64 - text_x, text_y), text, font=font, fill=status_fill)
+        draw.text(
+            (64 - text_x, text_y + FONTSIZE),
+            text,
+            font=font,
+            fill=status_fill
+        )
     if status:
         draw.text(
-            (status_x, text_y + FONTSIZE),
+            (status_x, text_y),
             status,
             font=font,
             fill=status_fill
@@ -251,12 +257,14 @@ def loop():
     global last_test
     global then
     now = time.time()
-    if now - then > POLL_RATE * 1000 or last_test is None:
+    print (now - then)
+    if now - then > POLL_RATE or last_test is None:
         project = get_project()
         last_test = process_recent_builds(project)
         set_global_status_vars(last_test)
         print_status()
         then = now
+
     animate_sentence()
     render()
     # execution_time = time.time() - then
