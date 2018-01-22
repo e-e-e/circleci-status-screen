@@ -195,15 +195,12 @@ def set_global_status_vars(test):
     elif status == 'failed':
         status_fill = '#FF0000'
         status_text = [
-            test['user'] + ' broke things',
-            'with commit: ',
-            test['subject']
+            test['user'] + ' broke things!',
         ]
     else:
         status_fill = 'rgb(102, 211, 228)'
         status_text = [
-            'Running!',
-            test['subject'],
+            'Running!' + test['subject'],
             str(test['progress']) + '%'
         ]
     text_length = text_width(status_text[status_text_index])
@@ -229,7 +226,7 @@ def render():
         return
     draw.rectangle([(0, 0), (64, 32)], fill='black')
     draw.rectangle([(0, 0), (64, 4)], fill=status_fill)
-    draw.rectangle([(0, 32 - 4), (64, 32 - 4)], fill=status_fill)
+    draw.rectangle([(0, 32 - 4), (64, 32)], fill=status_fill)
     if status_text:
         text = status_text[status_text_index]
         draw.text((64 - text_x, text_y), text, font=font, fill=status_fill)
