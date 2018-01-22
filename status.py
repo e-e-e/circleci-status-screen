@@ -44,7 +44,7 @@ text_length = 0
 status_text_index = 0
 status_fill = None                  # colour for notification of status
 text_x = None                       # the x position of strings
-text_y = 32 - (FONTSIZE / 2)        # y position for drawing text
+text_y = (32 - FONTSIZE) / 2        # y position for drawing text
 then = time.time()                  # timer for polling circle ci
 
 try:
@@ -249,8 +249,9 @@ def loop():
     animate_sentence()
     render()
     then = now
-    execution_time = time.time() - then
-    time.sleep(positive_value(0.05 - execution_time))
+    # execution_time = time.time() - then
+    # time.sleep(positive_value(0.05 - execution_time))
+    time.sleep(0.05)
 
 while True:
     loop()
