@@ -127,7 +127,6 @@ def workflow_status(workflow):
 
     if progress == len(workflow) and status != 'failed':
         status = 'success'
-
     return status, round((progress / len(workflow)) * 100)
 
 
@@ -257,7 +256,6 @@ def loop():
     global last_test
     global then
     now = time.time()
-    print (now - then)
     if now - then > POLL_RATE or last_test is None:
         project = get_project()
         last_test = process_recent_builds(project)
