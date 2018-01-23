@@ -1,0 +1,15 @@
+[Unit]
+Description=Circle ci status board
+After=multi-user.target network-online.target time-sync.target timers.target
+
+[Service]
+Type=idle
+ExecStartPre=/bin/sleep 60
+ExecStart=/usr/bin/python -u /home/pi/Playground/circleci-status-screen/status.py
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
